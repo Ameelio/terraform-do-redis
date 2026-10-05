@@ -12,10 +12,12 @@ terraform {
 
     local = {
       source  = "hashicorp/local"
-      version = "~> 2.4.0"
+      version = ">= 2.4.0"
     }
 
   }
 
-  required_version = "~> 1.14.0"
+  # ">= floor" rather than "~>": a pessimistic pin here fences every consumer's
+  # terraform core version (ameelio-infrastructure hit this moving to 1.16).
+  required_version = ">= 1.14.0"
 }
