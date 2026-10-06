@@ -63,7 +63,13 @@ resource "digitalocean_database_firewall" "redis_firewall" {
   }
 }
 
-resource "kubernetes_secret" "k8s_secrets" {
+# Renamed from deprecated kubernetes_secret (kubernetes provider v3 warns on
+# the un-suffixed name, and it has no moved-block support). Consumers bumping
+# to this version must migrate state in their root: a removed block
+# (destroy = false) for module.<name>.kubernetes_secret.k8s_secrets plus an
+# import of <namespace>/<app>-redis-secrets into
+# module.<name>[...].kubernetes_secret_v1.k8s_secrets.
+resource "kubernetes_secret_v1" "k8s_secrets" {
   metadata {
     labels = local.labels
     name = "${var.app}-redis-secrets"
